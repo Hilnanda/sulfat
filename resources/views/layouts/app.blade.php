@@ -85,7 +85,7 @@
                 $label_2018 = [];
 
                 for ($i = 0; $i < count($periode_2018); $i++) {
-                    $color_2018[$i] = 'rgba(' . rand(0, 255) . ', ' . rand(0, 255) . ', ' . rand(0, 255) . ', 0.5)';
+                    $color_2018[$i] = 'rgba(' . rand(0, 255) . ', ' . rand(0, 255) . ', ' . rand(0, 255) . ', 1)';
                 }
 
                 foreach ($permintaan_2018 as $item) {
@@ -112,7 +112,7 @@
                 $label_2019 = [];
 
                 for ($i = 0; $i < count($periode_2019); $i++) {
-                    $color_2019[$i] = 'rgba(' . rand(0, 255) . ', ' . rand(0, 255) . ', ' . rand(0, 255) . ', 0.5)';
+                    $color_2019[$i] = 'rgba(' . rand(0, 255) . ', ' . rand(0, 255) . ', ' . rand(0, 255) . ', 1)';
                 }
 
                 foreach ($permintaan_2019 as $item) {
@@ -120,7 +120,34 @@
                 }
 
                 foreach ($permintaan_2019 as $item) {
-                    $label_2018[] = tgl_indo($item->periode->nama_periode);
+                    $label_2019[] = tgl_indo($item->periode->nama_periode);
+                }
+
+                $color_2020 = [];
+
+                $periode_2020 = App\Models\Periode::whereYear('nama_periode', '2020')
+                    ->select('id')
+                    ->get()
+                    ->toArray();
+
+                $permintaan_2020 = App\Models\Permintaan::whereIn('id_periode', $periode_2020)
+                    ->select('jumlah_permintaan', 'id_periode')
+                    ->with('periode')
+                    ->get();
+
+                $jumlah_permintaan_2020 = [];
+                $label_2020 = [];
+
+                for ($i = 0; $i < count($periode_2020); $i++) {
+                    $color_2020[$i] = 'rgba(' . rand(0, 255) . ', ' . rand(0, 255) . ', ' . rand(0, 255) . ', 1)';
+                }
+
+                foreach ($permintaan_2020 as $item) {
+                    $jumlah_permintaan_2020[] = $item->jumlah_permintaan;
+                }
+
+                foreach ($permintaan_2020 as $item) {
+                    $label_2020[] = tgl_indo($item->periode->nama_periode);
                 }
 
             @endphp
@@ -159,9 +186,67 @@
                                 display: false,
                             }
                         },
-
                     }
+                });
 
+                const ctx_2019 = document.getElementById('chart_2019').getContext('2d');
+                const chart_2019 = new Chart(ctx_2019, {
+                    type: 'bar',
+                    data: {
+                        labels: @json($label_2019),
+                        datasets: [{
+                            data: @json($jumlah_permintaan_2019),
+                            backgroundColor: @json($color_2019),
+                            borderColor: @json($color_2019),
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Permintaan 2019'
+                            },
+                            legend: {
+                                display: false,
+                            }
+                        },
+                    }
+                });
+
+                const ctx_2020 = document.getElementById('chart_2020').getContext('2d');
+                const chart_2020 = new Chart(ctx_2020, {
+                    type: 'bar',
+                    data: {
+                        labels: @json($label_2020),
+                        datasets: [{
+                            data: @json($jumlah_permintaan_2020),
+                            backgroundColor: @json($color_2020),
+                            borderColor: @json($color_2020),
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Permintaan 2020'
+                            },
+                            legend: {
+                                display: false,
+                            }
+                        },
+                    }
                 });
             </script>
         @endif
