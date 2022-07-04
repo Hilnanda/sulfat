@@ -123,6 +123,20 @@ class PeramalanController extends Controller
                 'mape' => $map,
             ]);
         }
+
+        $jumlah = 0;
+        $index = count($permintaan) - 1;
+
+        for ($j = 0; $j < $periode; $j++) {
+            $jumlah += $permintaan[$index - $j]->jumlah_permintaan;
+        }
+
+        $bulan_depan = $jumlah / $periode;
+        $peramalan = Peramalan::orderBy('id', 'desc')->first();
+        $peramalan->update([
+            'bulan_depan' => round($bulan_depan),
+        ]);
+
     }
 
     public function weighted_moving_average($periode, $weighted = [])
@@ -166,5 +180,20 @@ class PeramalanController extends Controller
                 'mape' => $map,
             ]);
         }
+
+        $jumlah = 0;
+        $index = count($permintaan) - 1;
+
+        for ($j = 0; $j < $periode; $j++) {
+            $jumlah += $permintaan[$index - $j]->jumlah_permintaan * $weighted[$j];
+        }
+
+        $bulan_depan = $jumlah / array_sum($weighted);
+
+        $peramalan = Peramalan::orderBy('id', 'desc')->first();
+        $peramalan->update([
+            'bulan_depan' => round($bulan_depan),
+        ]);
+
     }
 }

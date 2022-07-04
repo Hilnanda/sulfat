@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PeramalanController;
 use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\PermintaanController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,9 +19,26 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/', function () {
-    return view('periode');
+    return view('login');
+})->name('login');
+
+Route::get('register', function () {
+    return view('register');
 });
 
-Route::resource('periode', PeriodeController::class)->except(['create', 'edit']);
-Route::resource('permintaan', PermintaanController::class)->except(['create', 'edit']);
-Route::resource('peramalan', PeramalanController::class)->only(['index', 'store']);
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
+    Route::resource('periode', PeriodeController::class)->except(['create', 'edit']);
+    Route::resource('permintaan', PermintaanController::class)->except(['create', 'edit']);
+    Route::resource('peramalan', PeramalanController::class)->only(['index', 'store']);
+    Route::resource('laporan', LaporanController::class)->only(['index', 'store']);
+    Route::resource('user', UserController::class)->except(['create', 'edit']);
+    Route::post('logout', [UserController::class, 'logout'])->name('logout');
+});
+
+Route::post('login', [UserController::class, 'login']);
+Route::post('register', [UserController::class, 'register'])->name('register');

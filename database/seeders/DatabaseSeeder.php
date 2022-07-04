@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Periode;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -266,5 +267,26 @@ class DatabaseSeeder extends Seeder
         }
 
         \App\Models\Permintaan::insert($permintaan);
+
+        $user = [
+            [
+                'nama' => 'Manager',
+                'username' => 'manager',
+                'email' => 'manager@gmail.com',
+                'password' => bcrypt('12345678'),
+                'jabatan' => 'manager',
+                'no_hp' => '0812345678',
+            ],
+            [
+                'nama' => 'Kepala',
+                'username' => 'kepala',
+                'email' => 'kepala@gmail.com',
+                'password' => bcrypt('12345678'),
+                'jabatan' => 'kepala',
+                'no_hp' => '0812345678',
+            ],
+        ];
+
+        User::insert($user);
     }
 }

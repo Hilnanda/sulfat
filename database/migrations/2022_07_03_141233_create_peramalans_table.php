@@ -25,6 +25,7 @@ return new class extends Migration
             $table->double('mad')->nullable();
             $table->double('mse')->nullable();
             $table->double('mape')->nullable();
+            $table->double('bulan_depan')->nullable();
         });
     }
 

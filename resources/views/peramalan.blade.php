@@ -30,12 +30,12 @@
         <div class="col">
             <div class="row">
                 <div class="col mb-3">
-                    <h3>Peramalan</h3>
+                    <h3>Prediksi</h3>
                 </div>
                 <div class="col mb-3">
                     <button type="button" class="btn btn-primary d-inline float-right" data-toggle="modal"
                         data-target="#tambahModal">
-                        Hitung Ulang Peramalan
+                        Hitung Ulang Prediksi
                     </button>
                 </div>
             </div>
@@ -50,7 +50,9 @@
                         <h6 class="card-title">Prediksi Permintaan Bulan Depan</h6>
                     </div>
                     <div class="card-body text-center">
-                        <span class="font-weight-bold" id="bulan_depan"></span>
+                        <span class="font-weight-bold">
+                            {{ number_format($peramalan[count($peramalan) - 1]->bulan_depan, 0, ',', '.') }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -73,7 +75,7 @@
                             <tr>
                                 <th>Periode</th>
                                 <th>Data Aktual</th>
-                                <th>Hasil Peramalan</th>
+                                <th>Hasil Prediksi</th>
                                 <th>Error</th>
                                 <th>MAD</th>
                                 <th>MSE</th>
@@ -343,7 +345,7 @@
 
             $('#standar_error').text(standar_error);
 
-            $('#bulan_depan').text(numberWithCommas(Math.ceil(jum_mov / kosong)));
+            // $('#bulan_depan').text(numberWithCommas(Math.ceil(jum_mov / kosong)));
             var label = @json($label);
             var aktual = @json($aktual);
             var hasil = @json($hasil);
