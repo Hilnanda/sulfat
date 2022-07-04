@@ -47,8 +47,7 @@
             <div class="col mb-3">
                 <div class="card">
                     <div class="card-header text-center">
-                        <h6 class="card-title">Predisi Permintaan</h6>
-                        <h6 class="card-title">Bulan Depan</h6>
+                        <h6 class="card-title">Prediksi Permintaan Bulan Depan</h6>
                     </div>
                     <div class="card-body text-center">
                         <span class="font-weight-bold" id="bulan_depan"></span>
@@ -131,7 +130,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="tambahModalLabel">Peramalan</h5>
+                    <h5 class="modal-title" id="tambahModalLabel">Hitung Peramalan</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -160,35 +159,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="ubahModal" tabindex="-1" aria-labelledby="ubahModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="ubahModalLabel">Peramalan</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="{{ route('peramalan.store') }}" method="POST">
-                    <div class="modal-body">
-                        @csrf
-                        @method('PUT')
-                        <div class="form-group">
-                            <label>Nama Peramalan</label>
-                            <input type="text" class="form-control datepicker" name="nama_peramalan"
-                                placeholder="Nama Peramalan">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <button type="submit" class="btn btn-primary">Hitung</button>
                     </div>
                 </form>
             </div>
