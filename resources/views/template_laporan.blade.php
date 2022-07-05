@@ -52,7 +52,7 @@ function tgl_indo($tanggal)
             <tr class="text-center bg-success text-white">
                 <th width="3%" rowspan="2">No</th>
                 <th rowspan="2">Periode</th>
-                <th colspan="4" class="text-center">Jumlah</th>
+                <th colspan="5" class="text-center">Jumlah</th>
             </tr>
             <tr class="text-center bg-success text-white">
                 <th>Produksi</th>
@@ -71,7 +71,8 @@ function tgl_indo($tanggal)
                     <td>{{ number_format($item->jumlah_impor, 0, ',', '.') }}</td>
                     <td>{{ number_format($item->jumlah_permintaan, 0, ',', '.') }}</td>
                     <td>{{ number_format($item->jumlah_sisa, 0, ',', '.') }}</td>
-                    <td>{{ number_format($item->peramalan->peramalan, 0, ',', '.') }}</td>
+                    <td>{{ $item->peramalan->peramalan > 0 ? number_format($item->peramalan->peramalan, 0, ',', '.') : '' }}
+                    </td>
                 </tr>
             @endforeach
         </tbody>
