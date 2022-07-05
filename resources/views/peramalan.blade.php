@@ -61,10 +61,10 @@
                     </div>
                     <div class="card-footer">
                         {{-- text miring --}}
-                        <span class="text-muted">
+                        <span class="text-muted text-center">
                             <i>Hasil peramalan diatas, adalah hasil peramalan permintaan untuk bulan depan yang bisa
                                 dijadikan
-                                acuan dalam pengambilan keputusan dalam menentukan jumlah prduksi.</i>
+                                acuan dalam pengambilan keputusan dalam menentukan jumlah produksi.</i>
                         </span>
                     </div>
                 </div>
