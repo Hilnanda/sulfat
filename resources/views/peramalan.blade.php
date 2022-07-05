@@ -32,12 +32,14 @@
                 <div class="col mb-3">
                     <h3>Prediksi</h3>
                 </div>
-                <div class="col mb-3">
-                    <button type="button" class="btn btn-primary d-inline float-right" data-toggle="modal"
-                        data-target="#tambahModal">
-                        Hitung Ulang Prediksi
-                    </button>
-                </div>
+                @if (auth()->user()->jabatan == 'manager')
+                    <div class="col mb-3">
+                        <button type="button" class="btn btn-primary d-inline float-right" data-toggle="modal"
+                            data-target="#tambahModal">
+                            Hitung Ulang Prediksi
+                        </button>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
