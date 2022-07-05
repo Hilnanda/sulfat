@@ -196,4 +196,11 @@ class PeramalanController extends Controller
         ]);
 
     }
+
+    public function hapusPeramalan()
+    {
+        Peramalan::truncate();
+        Alert::success('Berhasil', 'Data peramalan berhasil dihapus');
+        return back();
+    }
 }

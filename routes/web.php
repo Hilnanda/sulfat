@@ -42,6 +42,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('laporan', LaporanController::class)->only(['index', 'store']);
     Route::resource('user', UserController::class)->except(['create', 'edit']);
     Route::post('logout', [UserController::class, 'logout'])->name('logout');
+    Route::get('hapus-peramalan', [PeramalanController::class, 'hapusPeramalan']);
 });
 
 Route::post('login', [UserController::class, 'login']);
