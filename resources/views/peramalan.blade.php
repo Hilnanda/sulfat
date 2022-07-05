@@ -34,14 +34,14 @@
                 </div>
                 @if (auth()->user()->jabatan == 'manager')
                     <div class="col mb-3">
-                        <a href="{{ url('hapus-peramalan') }}" class="btn btn-info d-inline float-right mr-2"
-                            data-toggle="modal" data-target="#tambahModal">
-                            Kosongkan Hasil Peramalan
-                        </a>
                         <button type="button" class="btn btn-primary d-inline float-right" data-toggle="modal"
                             data-target="#tambahModal">
                             Hitung Ulang Prediksi
                         </button>
+                        <a href="{{ url('hapus-peramalan') }}" class="btn btn-info d-inline float-right mr-2"
+                            data-toggle="modal" data-target="#tambahModal">
+                            Kosongkan Hasil Peramalan
+                        </a>
                     </div>
                 @endif
             </div>
