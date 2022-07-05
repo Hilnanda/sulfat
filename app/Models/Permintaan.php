@@ -17,4 +17,9 @@ class Permintaan extends Model
     {
         return $this->belongsTo(Periode::class, 'id_periode');
     }
+
+    public function peramalan()
+    {
+        return $this->hasOne(Peramalan::class, 'id_permintaan');
+    }
 }
