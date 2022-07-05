@@ -58,7 +58,7 @@
                                 <th></th>
                             </tr>
                             <tr>
-                                <th rowspan="2">Periode</th>
+                                <th rowspan="2">Bulan</th>
                                 <th colspan="4" class="text-center">Jumlah</th>
                                 <th rowspan="2" style="width: 25%">Aksi</th>
                             </tr>
@@ -109,9 +109,9 @@
                     <div class="modal-body">
                         @csrf
                         <div class="form-group">
-                            <label>Periode</label>
+                            <label>Bulan</label>
                             <select name="id_periode" class="form-control">
-                                <option value="">Pilih Periode</option>
+                                <option value="">Pilih Bulan</option>
                                 @foreach ($periode as $item)
                                     <option value="{{ $item->id }}">{{ tgl_indo($item->nama_periode) }}</option>
                                 @endforeach
@@ -157,9 +157,9 @@
                         @csrf
                         @method('PUT')
                         <div class="form-group">
-                            <label>Periode</label>
+                            <label>Bulan</label>
                             <select name="id_periode" class="form-control">
-                                <option value="">Pilih Periode</option>
+                                <option value="">Pilih Bulan</option>
                                 @foreach ($periode as $item)
                                     <option value="{{ $item->id }}">{{ tgl_indo($item->nama_periode) }}</option>
                                 @endforeach
