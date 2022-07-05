@@ -162,6 +162,14 @@
                                 @endfor
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label>Periode Awal Peramalan</label>
+                            <input type="text" class="form-control datepicker" name="periode_awal">
+                        </div>
+                        <div class="form-group">
+                            <label>Peride Akhir Peramalan</label>
+                            <input type="text" class="form-control datepicker" name="periode_akhir">
+                        </div>
                         <div id="tampung"></div>
                     </div>
                     <div class="modal-footer">

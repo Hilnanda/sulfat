@@ -63,29 +63,51 @@ class PeramalanController extends Controller
         request()->validate([
             'periode' => 'required',
             'metode' => 'required',
+            'periode_awal' => 'required',
+            'periode_akhir' => 'required',
         ]);
 
-        if (request('metode') == 1) {
-            $this->moving_average($request->periode);
-        }
+        $periode_awal = date('Y-m-d', strtotime('01-' . $request->periode_awal));
+        $periode_akhir = date('Y-m-d', strtotime('01-' . $request->periode_akhir));
 
-        if (request('metode') == 2) {
-            if ($request->periode != count($request->weighted)) {
-                Alert::error('Gagal', 'Ada input weighted yang belum diisi');
-                return back();
+        $permintaan = Permintaan::whereHas('periode', function ($query) use ($periode_awal, $periode_akhir) {
+            return $query->whereBetween('nama_periode', [$periode_awal, $periode_akhir]);
+        })->get();
+
+        if (count($permintaan) > 0) {
+            if (request('metode') == 1) {
+                $this->moving_average($request->periode, $request->periode_awal, $request->periode_akhir);
             }
 
-            $this->weighted_moving_average($request->periode, $request->weighted);
+            if (request('metode') == 2) {
+                if ($request->periode != count($request->weighted)) {
+                    Alert::error('Gagal', 'Ada input weighted yang belum diisi');
+                    return back();
+                }
+
+                $this->weighted_moving_average($request->periode, $request->weighted, $request->periode_awal, $request->periode_akhir);
+            }
+
+            Alert::success('Berhasil', 'Data peramalan berhasil dihitung ulang');
+            return back();
+        } else {
+            Alert::error('Gagal', 'Data yang dicetak kosong');
+            return back();
         }
 
-        Alert::success('Berhasil', 'Data peramalan berhasil dihitung ulang');
-        return back();
     }
 
-    private function moving_average($periode)
+    private function moving_average($periode, $periode_awal, $periode_akhir)
     {
+        $periode_awal = date('Y-m-d', strtotime('01-' . $periode_awal));
+        $periode_akhir = date('Y-m-d', strtotime('01-' . $periode_akhir));
+
         Peramalan::truncate();
-        $permintaan = Permintaan::get();
+
+        $permintaan = Permintaan::whereHas('periode', function ($query) use ($periode_awal, $periode_akhir) {
+            return $query->whereBetween('nama_periode', [$periode_awal, $periode_akhir]);
+        })->get();
+
         $periode = intval($periode);
 
         for ($i = 0; $i <= $periode - 1; $i++) {
@@ -139,10 +161,16 @@ class PeramalanController extends Controller
 
     }
 
-    public function weighted_moving_average($periode, $weighted = [])
+    public function weighted_moving_average($periode, $weighted = [], $periode_awal, $periode_akhir)
     {
+        $periode_awal = date('Y-m-d', strtotime('01-' . $periode_awal));
+        $periode_akhir = date('Y-m-d', strtotime('01-' . $periode_akhir));
+
         Peramalan::truncate();
-        $permintaan = Permintaan::get();
+        $permintaan = Permintaan::whereHas('periode', function ($query) use ($periode_awal, $periode_akhir) {
+            return $query->whereBetween('nama_periode', [$periode_awal, $periode_akhir]);
+        })->get();
+
         $periode = intval($periode);
 
         for ($i = 0; $i <= $periode - 1; $i++) {
