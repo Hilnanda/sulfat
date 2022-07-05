@@ -59,6 +59,14 @@
                             {{ number_format($peramalan[count($peramalan) - 1]->bulan_depan, 0, ',', '.') }}
                         </span>
                     </div>
+                    <div class="card-footer">
+                        {{-- text miring --}}
+                        <span class="text-muted">
+                            <i>Hasil peramalan diatas, adalah hasil peramalan permintaan untuk bulan depan yang bisa
+                                dijadikan
+                                acuan dalam pengambilan keputusan dalam menentukan jumlah prduksi.</i>
+                        </span>
+                    </div>
                 </div>
             </div>
             <div class="col mb-3">

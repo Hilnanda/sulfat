@@ -154,6 +154,7 @@ class PeramalanController extends Controller
         }
 
         $bulan_depan = $jumlah / $periode;
+
         $peramalan = Peramalan::orderBy('id', 'desc')->first();
         $peramalan->update([
             'bulan_depan' => round($bulan_depan),
