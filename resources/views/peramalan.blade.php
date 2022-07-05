@@ -38,8 +38,7 @@
                             data-target="#tambahModal">
                             Hitung Ulang Prediksi
                         </button>
-                        <a href="{{ url('hapus-peramalan') }}" class="btn btn-info d-inline float-right mr-2"
-                            data-toggle="modal" data-target="#tambahModal">
+                        <a href="{{ url('hapus-peramalan') }}" class="btn btn-info d-inline float-right mr-2">
                             Kosongkan Hasil Peramalan
                         </a>
                     </div>
