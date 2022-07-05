@@ -14,6 +14,17 @@ class PermintaanController extends Controller
         $permintaan = Permintaan::orderBy('id', 'desc')->get();
         $periode = Periode::orderBy('id', 'desc')->get();
 
+        $cek_periode = Periode::whereYear('nama_periode', date('Y'))->first();
+
+        if ($cek_periode == null) {
+            for ($i = 1; $i <= 12; $i++) {
+                Periode::create([
+                    'nama_periode' => date('Y-m-d', strtotime(date('Y') . '-' . $i . '-01')),
+                ]);
+
+            }
+        }
+
         return view('permintaan', compact('permintaan', 'periode'));
     }
 
