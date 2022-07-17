@@ -72,12 +72,17 @@ class UserController extends Controller
         $user = User::whereUsername($request->username)->first();
 
         if (!empty($user) && Hash::check($request->password, $user->password)) {
-            $request->session()->regenerate();
+            if ($user->status == '1') {
+                $request->session()->regenerate();
 
-            Auth::login($user);
+                Auth::login($user);
 
-            Alert::success('Login Berhasil', 'Selamat Datang');
-            return redirect()->route('dashboard');
+                Alert::success('Login Berhasil', 'Selamat Datang');
+                return redirect()->route('dashboard');
+            } else {
+                Alert::error('Login Gagal', 'User belum diaktifkan, silakan hubungi developer');
+                return back();
+            }
         } else {
             Alert::error('Gagal', 'Username atau Password Salah');
             return redirect()->route('login');
@@ -106,6 +111,23 @@ class UserController extends Controller
         $user->save();
 
         Alert::success('Berhasil', 'User berhasil ditambahkan, silakan login');
+        return back();
+    }
+
+    public function status($id)
+    {
+        $user = User::find($id);
+
+        if ($user->status == 1) {
+            $user->status = 0;
+        } else {
+            $user->status = 1;
+        }
+
+        $user->save();
+
+        Alert::success('Berhasil', 'Status berhasil diubah');
+
         return back();
     }
 }

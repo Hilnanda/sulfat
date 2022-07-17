@@ -55,7 +55,8 @@
                                 <th>Username</th>
                                 <th>No HP</th>
                                 <th>Jabatan</th>
-                                <th style="width: 25%">Aksi</th>
+                                <th>Status</th>
+                                <th style="width: 50%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,14 +68,32 @@
                                     <td>{{ $item->no_hp }}</td>
                                     <td>{{ $item->jabatan == 'manager' ? 'Manager Produksi' : 'Kepala Produksi' }}</td>
                                     <td>
-                                        <button class="btn btn-warning mb-3 btn-sm"
+                                        @if ($item->status == 1)
+                                            <span class="badge badge-success">Aktif</span>
+                                        @else
+                                            <span class="badge badge-danger">Belum Aktif</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($item->status == 1)
+                                            <a type="button" class="btn mb-3 btn-block btn-secondary btn-sm"
+                                                href="{{ url('status_user/' . $item->id) }}">
+                                                Nonaktifkan
+                                            </a>
+                                        @else
+                                            <a type="button" class="btn mb-3 btn-block btn-info btn-sm"
+                                                href="{{ url('status_user/' . $item->id) }}">
+                                                Aktifkan
+                                            </a>
+                                        @endif
+                                        <button class="btn btn-warning mb-3 btn-block btn-sm"
                                             onclick="fungsiEdit(`{{ $item }}`)">Edit</button>
                                         <form action="{{ route('user.destroy', $item->id) }}" method="POST"
                                             class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                class="btn btn-danger btn-delete mb-3 btn-sm">Hapus</button>
+                                                class="btn btn-danger btn-delete btn-block mb-3 btn-sm">Hapus</button>
                                         </form>
                                     </td>
                                 </tr>

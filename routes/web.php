@@ -43,6 +43,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('user', UserController::class)->except(['create', 'edit']);
     Route::post('logout', [UserController::class, 'logout'])->name('logout');
     Route::get('hapus-peramalan', [PeramalanController::class, 'hapusPeramalan']);
+    Route::get('status_user/{id}', [UserController::class, 'status']);
 });
 
 Route::post('login', [UserController::class, 'login']);

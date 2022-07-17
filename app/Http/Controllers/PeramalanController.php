@@ -36,21 +36,22 @@ class PeramalanController extends Controller
 
     public function index()
     {
-        $peramalan = Peramalan::all();
+        $peramalan = Peramalan::whereNotNull('peramalan')->get();
         $label = [];
         $aktual = [];
         $hasil = [];
 
         if (count($peramalan) > 0) {
-            foreach ($peramalan as $p) {
+            foreach ($peramalan as $key => $p) {
                 $label[] = $this->tgl_indo($p->periode->nama_periode);
+
             }
 
-            foreach ($peramalan as $p) {
+            foreach ($peramalan as $key => $p) {
                 $aktual[] = $p->permintaan;
             }
 
-            foreach ($peramalan as $p) {
+            foreach ($peramalan as $key => $p) {
                 $hasil[] = $p->peramalan;
             }
         }
