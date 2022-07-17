@@ -270,11 +270,12 @@ class DatabaseSeeder extends Seeder
 
         $user = [
             [
-                'nama' => 'Manager',
-                'username' => 'manager',
-                'email' => 'manager@gmail.com',
+                'nama' => 'Developer',
+                'username' => 'developer',
+                'email' => 'developer@gmail.com',
                 'password' => bcrypt('12345678'),
                 'jabatan' => 'manager',
+                'status' => 1,
                 'no_hp' => '0812345678',
             ],
             [
@@ -283,6 +284,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'kepala@gmail.com',
                 'password' => bcrypt('12345678'),
                 'jabatan' => 'kepala',
+                'status' => 1,
                 'no_hp' => '0812345678',
             ],
         ];
