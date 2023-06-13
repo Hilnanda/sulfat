@@ -73,39 +73,45 @@ class PeramalanController extends Controller
         ]);
         $period = 0;
 
-        $laporan = Laporan::select('date', 'sales', 'category')->where('category', $request->category)->get()->toArray();
+
+
+
+        switch ($request->periode) {
+            case '1minggu':
+                $period = 7;
+                break;
+            case '2minggu':
+                $period = 14;
+                break;
+            case '1bulan':
+                $period = 30;
+                break;
+            default:
+                'Periode Tidak ditemukan';
+        }
+
+        $laporan = Laporan::select('date', 'sales', 'category')->where('category', $request->category)
+            ->whereDate('date', '>=', $request->periode_awal)->take($period)->get()->toArray();
+
+            // dd($laporan);
 
         if ($laporan) {
-
-            switch ($request->periode) {
-                case '1minggu':
-                    $period = 7;
-                    break;
-                case '2minggu':
-                    $period = 14;
-                    break;
-                case '1bulan':
-                    $period = 30;
-                    break;
-                default:
-                    'Periode Tidak ditemukan';
-            }
-
-
             $avgs = [];
 
             $total = 0;
             $mad = 0;
             $mse = 0;
             $mape = 0;
+            $avgs = [];
 
             try {
                 for ($i = 0; $i < $period; $i++) {
                     $subset = array_slice($laporan, $i, $period);
                     $avg = array_sum(array_column($subset, 'sales')) / $period;
-                    $forecast = round($avg, 2);
+                    $forecast = round($avg, 1);
                     $round = round($forecast, 0);
-                    $total = array_sum(array_column($subset, 'sales'));
+                    
+                    // dd(array_column($subset, 'sales'));
 
                     array_push($laporan, ['date' => date('Y-m-d', strtotime($laporan[$i]['date'])), 'sales' => $round]);
 
@@ -114,10 +120,11 @@ class PeramalanController extends Controller
                     $error_pangkat = pow($error1, 2);
                     $error_persen = $error2 / $round * 100;
                     $error_persen = round($error_persen, 2);
+                    $total += $round;
 
                     $avgs[] = [
                         'date' =>  date('Y-m-d', strtotime($laporan[$i]['date'] . "+" . $period . " days")),
-                        'sales' => $laporan[$i]['sales'],
+                        'sales' => $round,
                         'forecast' => $forecast,
                         'round' => $round,
                         'error1' => $error1,
@@ -133,6 +140,8 @@ class PeramalanController extends Controller
                     $mad = round($mad, 3);
                     $mse = round($mse, 3);
                     $mape = round($mape, 3);
+                    // $total = array_sum($avgs[0]['sales']);
+                    
                 }
             } catch (Exception $e) {
                 Alert::error('Gagal', 'Data yang dihitung Kurang tepat');
