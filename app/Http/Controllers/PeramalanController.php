@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Laporan;
 use App\Models\Peramalan;
 use App\Models\Permintaan;
+use DivisionByZeroError;
 use Exception;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -93,7 +94,7 @@ class PeramalanController extends Controller
         $laporan = Laporan::select('date', 'sales', 'category')->where('category', $request->category)
             ->whereDate('date', '>=', $request->periode_awal)->take($period)->get()->toArray();
 
-            // dd($laporan);
+        // dd($laporan);
 
         if ($laporan) {
             $avgs = [];
@@ -110,7 +111,7 @@ class PeramalanController extends Controller
                     $avg = array_sum(array_column($subset, 'sales')) / $period;
                     $forecast = round($avg, 1);
                     $round = round($forecast, 0);
-                    
+
                     // dd(array_column($subset, 'sales'));
 
                     array_push($laporan, ['date' => date('Y-m-d', strtotime($laporan[$i]['date'])), 'sales' => $round]);
@@ -141,8 +142,10 @@ class PeramalanController extends Controller
                     $mse = round($mse, 3);
                     $mape = round($mape, 3);
                     // $total = array_sum($avgs[0]['sales']);
-                    
+
                 }
+            } catch (DivisionByZeroError $e) {
+                Alert::error('Gagal', 'Terdapat pembagian 0');
             } catch (Exception $e) {
                 Alert::error('Gagal', 'Data yang dihitung Kurang tepat');
                 // return back();
