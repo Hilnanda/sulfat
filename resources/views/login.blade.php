@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/gif" sizes="16x16">
 
-    <title>Sistem Peramalan Permintaan Asam Sulfat</title>
+    <title>Sistem Peramalan Permintaan Bahan Baku Tuan Coffee</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}">
@@ -41,8 +41,8 @@
                         <div class="p-3">
                             <div class="text-center">
                                 <img src="{{ asset('img/logo.png') }}" width="40%" class="mb-3" />
-                                <h2 class="h4 text-gray-900">Sistem Peramalan Permintaan Asam Sulfat<br></h2>
-                                <h2 class="h4 text-gray-900 mb-5">PT. Petrokimia Gresik</h2>
+                                <h2 class="h4 text-gray-900">Sistem Peramalan Permintaan Bahan Baku<br></h2>
+                                <h2 class="h4 text-gray-900 mb-5">Tuan Coffee</h2>
                             </div>
                             <form class="user" action="{{ url('login') }}" method="POST">
                                 @csrf
@@ -59,13 +59,13 @@
                                     Login
                                 </button>
                                 <hr>
-                                <div class="text-center mb-2">
+                                {{-- <div class="text-center mb-2">
                                     <span class="text-muted">Belum punya akun ?</span>
                                 </div>
                                 <a href="{{ url('register') }}" class="btn btn-warning btn-user btn-block mt-1"
                                     style="font-size:1rem;">
                                     Register
-                                </a>
+                                </a> --}}
                             </form>
                         </div>
                     </div>

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Laporan;
 use App\Models\Peramalan;
 use App\Models\Permintaan;
+use Exception;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -40,11 +42,14 @@ class PeramalanController extends Controller
         $label = [];
         $aktual = [];
         $hasil = [];
+        $total = 0;
+        $mad = 0;
+        $mse = 0;
+        $mape = 0;
 
         if (count($peramalan) > 0) {
             foreach ($peramalan as $key => $p) {
                 $label[] = $this->tgl_indo($p->periode->nama_periode);
-
             }
 
             foreach ($peramalan as $key => $p) {
@@ -56,10 +61,97 @@ class PeramalanController extends Controller
             }
         }
 
-        return view('peramalan', compact('peramalan', 'aktual', 'hasil', 'label'));
+        return view('peramalan', compact('peramalan', 'aktual', 'hasil', 'label', 'total', 'mad', 'mse', 'mape'));
     }
 
     public function store(Request $request)
+    {
+        request()->validate([
+            'periode' => 'required',
+            'metode' => 'required',
+            'periode_awal' => 'required',
+        ]);
+        $period = 0;
+
+        $laporan = Laporan::select('date', 'sales', 'category')->where('category', $request->category)->get()->toArray();
+
+        if ($laporan) {
+
+            switch ($request->periode) {
+                case '1minggu':
+                    $period = 7;
+                    break;
+                case '2minggu':
+                    $period = 14;
+                    break;
+                case '1bulan':
+                    $period = 30;
+                    break;
+                default:
+                    'Periode Tidak ditemukan';
+            }
+
+
+            $avgs = [];
+
+            $total = 0;
+            $mad = 0;
+            $mse = 0;
+            $mape = 0;
+
+            try {
+                for ($i = 0; $i < $period; $i++) {
+                    $subset = array_slice($laporan, $i, $period);
+                    $avg = array_sum(array_column($subset, 'sales')) / $period;
+                    $forecast = round($avg, 2);
+                    $round = round($forecast, 0);
+                    $total = array_sum(array_column($subset, 'sales'));
+
+                    array_push($laporan, ['date' => date('Y-m-d', strtotime($laporan[$i]['date'])), 'sales' => $round]);
+
+                    $error1 = $laporan[$i]["sales"] - $round;
+                    $error2 = abs($error1);
+                    $error_pangkat = pow($error1, 2);
+                    $error_persen = $error2 / $round * 100;
+                    $error_persen = round($error_persen, 2);
+
+                    $avgs[] = [
+                        'date' =>  date('Y-m-d', strtotime($laporan[$i]['date'] . "+" . $period . " days")),
+                        'sales' => $laporan[$i]['sales'],
+                        'forecast' => $forecast,
+                        'round' => $round,
+                        'error1' => $error1,
+                        'error2' => $error2,
+                        'error_pangkat' => $error_pangkat,
+                        'error_persen' => $error_persen,
+                        'category' => $laporan[$i]['category'],
+                    ];
+
+                    $mad = array_sum(array_column($avgs, 'error2')) / $period;
+                    $mse = array_sum(array_column($avgs, 'error_pangkat')) / $period;
+                    $mape = array_sum(array_column($avgs, 'error_persen')) / $period;
+                    $mad = round($mad, 3);
+                    $mse = round($mse, 3);
+                    $mape = round($mape, 3);
+                }
+            } catch (Exception $e) {
+                Alert::error('Gagal', 'Data yang dihitung Kurang tepat');
+                // return back();
+            }
+        } else {
+            Alert::error('Gagal', 'Data yang dihitung kosong');
+            return back();
+        }
+        // Tampilkan hasil SMA, Forecast, dan Round
+        // foreach ($avgs as $avg) {
+        //     echo "t: {$avg['date']}, Sales: {$avg['sales']}, Forecast: {$avg['forecast']}, Round: {$avg['round']}, 
+        //     Error: {$avg['error1']}, [Error]: {$avg['error2']}, [Error^2]: {$avg['error_pangkat']}, [% Error]: {$avg['error_persen']}\n";
+        //     echo "<br>";
+        // }
+        return view('peramalan', compact('avgs', 'total', 'mad', 'mse', 'mape'));
+    }
+
+    public function store1(Request $request)
     {
         request()->validate([
             'periode' => 'required',
@@ -95,7 +187,6 @@ class PeramalanController extends Controller
             Alert::error('Gagal', 'Data yang dicetak kosong');
             return back();
         }
-
     }
 
     private function moving_average($periode, $periode_awal, $periode_akhir)
@@ -160,7 +251,6 @@ class PeramalanController extends Controller
         $peramalan->update([
             'bulan_depan' => round($bulan_depan),
         ]);
-
     }
 
     public function weighted_moving_average($periode, $weighted = [], $periode_awal, $periode_akhir)
@@ -224,13 +314,12 @@ class PeramalanController extends Controller
         $peramalan->update([
             'bulan_depan' => round($bulan_depan),
         ]);
-
     }
 
     public function hapusPeramalan()
     {
-        Peramalan::truncate();
-        Alert::success('Berhasil', 'Data peramalan berhasil dihapus');
+        // Peramalan::truncate();
+        Alert::success('Berhasil', 'Data peramalan berhasil dikosongkan');
         return back();
     }
 }

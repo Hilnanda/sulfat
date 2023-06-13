@@ -5,7 +5,7 @@
 
 <style>
     .navbar {
-        background-color: #FAC900 !important;
+        background-color: #000000 !important;
     }
 
     .datepicker {

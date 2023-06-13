@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('content')
+@section('peramalan')
     @php
     function tgl_indo($tanggal)
     {
@@ -27,7 +27,7 @@
         return $bulan[(int) $pecahkan[1]] . ' ' . $pecahkan[0];
     }
     @endphp
-    <div class="row">
+    <div class="row mt-4">
         <div class="col">
             <div class="row">
                 <div class="col mb-3">

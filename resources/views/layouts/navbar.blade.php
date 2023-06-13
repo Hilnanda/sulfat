@@ -11,36 +11,36 @@
 
                 @auth
                     <li class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
-                        <a class="nav-link" href="dashboard">Dashboard</a>
+                        <a class="nav-link color-font" href="dashboard" style="color: white">Dashboard</a>
                     </li>
                     @if (auth()->user()->jabatan == 'kepala')
                         <li class="nav-item {{ request()->is('permintaan') ? 'active' : '' }}">
-                            <a class="nav-link" href="permintaan">Permintaan</a>
+                            <a class="nav-link" href="permintaan" style="color: white">Permintaan</a>
                         </li>
                         <li class="nav-item {{ request()->is('peramalan') ? 'active' : '' }}">
-                            <a class="nav-link" href="peramalan">Prediksi</a>
+                            <a class="nav-link" href="peramalan" style="color: white">Prediksi</a>
                         </li>
                     @elseif(auth()->user()->jabatan == 'manager')
                         <li class="nav-item {{ request()->is('peramalan') ? 'active' : '' }}">
-                            <a class="nav-link" href="peramalan">Prediksi</a>
+                            <a class="nav-link" href="peramalan" style="color: white">Prediksi</a>
                         </li>
                         <li class="nav-item {{ request()->is('laporan') ? 'active' : '' }}">
-                            <a class="nav-link" href="laporan">Laporan</a>
+                            <a class="nav-link" href="laporan" style="color: white">Laporan</a>
                         </li>
-                        <li class="nav-item {{ request()->is('user') ? 'active' : '' }}">
-                            <a class="nav-link" href="user">User</a>
-                        </li>
+                        {{-- <li class="nav-item {{ request()->is('user') ? 'active' : '' }}">
+                            <a class="nav-link" href="user" style="color: white">User</a>
+                        </li> --}}
                     @endif
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" style="color: white"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{ auth()->user()->nama }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('logout') }}"
+                            <a class="dropdown-item" href="{{ route('logout') }}" 
                                 onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                                     document.getElementById('logout-form').submit();" >
                                 Logout</a>
                         </div>
                     </li>

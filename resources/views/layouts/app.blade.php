@@ -9,7 +9,7 @@
 
     @include('layouts.styles')
 
-    <title>Sistem Peramalan Permintaan Asam Sulfat</title>
+    <title>Sistem Peramalan Permintaan Bahan Baku Tuan Coffee</title>
 </head>
 
 <body class="bg-light">

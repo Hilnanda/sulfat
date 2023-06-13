@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Laporan;
 use App\Models\Permintaan;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
@@ -12,7 +13,10 @@ class LaporanController extends Controller
     public function index()
     {
         $permintaan = Permintaan::all();
-        return view('laporan', compact('permintaan'));
+        $laporanUht = Laporan::where('category', 'UHT')->get();
+        $laporanFm = Laporan::where('category', 'Fresh Milk')->get();
+        $laporanBeans = Laporan::where('category', 'Beans')->get();
+        return view('laporan', compact('permintaan','laporanUht','laporanFm','laporanBeans'));
     }
 
     public function store(Request $request)
@@ -37,5 +41,17 @@ class LaporanController extends Controller
             return back();
         }
 
+    }
+
+    public function create(Request $request)
+    {
+        $laporan = new Laporan;
+        $laporan->sales = $request->input('sales');
+        $laporan->date = $request->input('date');
+        $laporan->category = $request->input('category');
+        $laporan->save();
+
+        Alert::success('Berhasil', 'Laporan berhasil ditambahkan');
+        return back();
     }
 }

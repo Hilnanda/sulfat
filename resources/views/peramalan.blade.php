@@ -23,8 +23,7 @@
         // variabel pecahkan 1 = bulan
         // variabel pecahkan 2 = tahun
 
-        return $bulan[(int) $pecahkan[1]] . ' ' . $pecahkan[0];
-    }
+        return $pecahkan[2] . ' ' . $bulan[(int) $pecahkan[1]] . ' ' . $pecahkan[0];    }
     @endphp
     <div class="row mb-2 mt-4">
         <div class="col">
@@ -47,7 +46,7 @@
         </div>
     </div>
 
-    @if (count($peramalan) > 0)
+    {{-- @if (count($avgs) > 0)
         <div class="row mb-3">
             <div class="col mb-3">
                 <div class="card">
@@ -59,17 +58,17 @@
                             {{ number_format($peramalan[count($peramalan) - 1]->bulan_depan, 0, ',', '.') }}
                         </span>
                     </div>
-                    <div class="card-footer text-center">
+                    <div class="card-footer text-center"> --}}
                         {{-- text miring --}}
-                        <span class="text-muted">
+                        {{-- <span class="text-muted">
                             <i>Hasil peramalan diatas, adalah hasil peramalan permintaan untuk bulan depan yang bisa
                                 dijadikan
                                 acuan dalam pengambilan keputusan dalam menentukan jumlah produksi.</i>
                         </span>
                     </div>
                 </div>
-            </div>
-            <div class="col mb-3">
+            </div> --}}
+            {{-- <div class="col mb-3">
                 <div class="card">
                     <div class="card-body">
                         <canvas id="myChart" width="auto" height="150%"></canvas>
@@ -77,7 +76,7 @@
                 </div>
             </div>
         </div>
-    @endif
+    @endif --}}
 
     <div class="row">
         <div class="col">
@@ -86,54 +85,57 @@
                     <table class="table table-stripped table-bordered w-100">
                         <thead>
                             <tr>
-                                <th>Periode</th>
-                                <th>Data Aktual</th>
-                                <th>Hasil Prediksi</th>
+                                <th>Kategori</th>
+                                <th>Tanggal</th>
+                                <th>Sales</th>
+                                <th>Forecast</th>
+                                <th>Round</th>
                                 <th>Error</th>
-                                <th>MAD</th>
-                                <th>MSE</th>
-                                <th>MAPE</th>
+                                <th>[Error]</th>
+                                <th>Error^2</th>
+                                <th>% Error</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($peramalan as $item)
+                            @if (isset($avgs))
+                            @forelse ($avgs as $item)
                                 <tr>
-                                    <td>{{ tgl_indo($item->periode->nama_periode) }}</td>
-                                    <td class="permintaan">{{ $item->permintaan }}</td>
-                                    <td class="peramalan">{{ $item->peramalan }}</td>
-                                    <td class="error">{{ $item->error }}</td>
-                                    <td class="mad">{{ $item->mad }}</td>
-                                    <td class="mse">{{ $item->mse }}</td>
-                                    <td>{{ !is_null($item->mape) ? $item->mape . '%' : '' }}</td>
-                                    <td class="mape d-none">{{ $item->mape }}</td>
+                                    <td class="">{{ $item['category'] }}</td>
+                                    <td>{{ tgl_indo($item['date']) }}</td>
+                                    <td class="">{{ $item['sales'] }}</td>
+                                    <td class="">{{ $item['forecast'] }}</td>
+                                    <td class="">{{ $item['round'] }}</td>
+                                    <td class="">{{ $item['error1'] }}</td>
+                                    <td class="">{{ $item['error2'] }}</td>
+                                    <td class="">{{ $item['error_pangkat'] }}</td>
+                                    <td class="">{{ $item['error_persen'] }}</td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="text-center">Data belum dihitung</td>
+                                    <td colspan="9" class="text-center">Data belum dihitung</td>
                                 </tr>
                             @endforelse
+                            @endif
                         </tbody>
                         <tfoot>
                             <tr class="font-weight-bold">
-                                <td colspan="3">Total</td>
-                                <td id="error"></td>
-                                <td id="mad"></td>
-                                <td id="mse"></td>
-                                <td id="mape"></td>
+                                
+                                <td id="error" colspan="2"></td>
+                                <td id="total">{{ $total }}</td>
+                                <td id="mse" colspan="3"></td>
+                                <td id="MAD">{{ $mad }}</td>
+                                <td id="MSE">{{ $mse }}</td>
+                                <td id="MAPE">{{ $mape }}</td>
                             </tr>
                             <tr class="font-weight-bold">
-                                <td colspan="3">Rata - Rata</td>
-                                <td id="ave_error"></td>
-                                <td id="ave_mad"></td>
-                                <td id="ave_mse"></td>
-                                <td id="ave_mape"></td>
+                                <td id="ave_error" colspan="2"></td>
+                                <td id="total">Total</td>
+                                <td id="ave_mse" colspan="3"></td>
+                                <td id="MAD">MAD</td>
+                                <td id="MSE">MSE</td>
+                                <td id="MAPE">MAPE</td>
                             </tr>
-                            <tr class="font-weight-bold">
-                                <td colspan="5" class="text-center">
-                                    Standar Error
-                                </td>
-                                <td colspan="2" id="standar_error" class="text-center"></td>
-                            </tr>
+                            
                         </tfoot>
                     </table>
                 </div>
@@ -156,27 +158,33 @@
                         <div class="form-group">
                             <label>Metode</label>
                             <select type="text" class="form-control" name="metode">
-                                <option value="">Pilih Metode</option>
+                                {{-- <option value="">Pilih Metode</option> --}}
                                 <option value="1">Simple Moving Average</option>
-                                <option value="2">Weighted Moving Average</option>
+                                {{-- <option value="2">Weighted Moving Average</option> --}}
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Periode</label>
                             <select type="text" class="form-control" name="periode">
                                 <option value="">Pilih Periode</option>
-                                @for ($i = 3; $i <= 12; $i++)
-                                    <option value="{{ $i }}">{{ $i }} Bulan</option>
-                                @endfor
+                                <option value="1minggu"> 1 Minggu</option>
+                                <option value="2minggu"> 2 Minggu</option>
+                                <option value="1bulan"> 1 Bulan</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Periode Awal Peramalan</label>
-                            <input type="text" class="form-control datepicker" name="periode_awal">
+                            <input type="date" class="form-control" name="periode_awal">
                         </div>
                         <div class="form-group">
-                            <label>Peride Akhir Peramalan</label>
-                            <input type="text" class="form-control datepicker" name="periode_akhir">
+                            <label>Kategori</label>
+                            <select type="text" class="form-control" name="category" required>
+                                <option value="">Pilih Kategori</option>
+                                <option value="UHT">UHT</option>
+                                <option value="Fresh Milk">Fresh Milk</option>
+                                <option value="Beans">Beans</option>
+                                {{-- <option value="2">Weighted Moving Average</option> --}}
+                            </select>
                         </div>
                         <div id="tampung"></div>
                     </div>
@@ -311,88 +319,5 @@
         }
     </script>
 
-    @if (count($peramalan) > 0)
-        <script>
-            var kosong = 0;
-
-            var error = 0;
-            $('.error').each(function() {
-                if ($(this).text() == '') {
-                    kosong++;
-                } else {
-                    error += parseFloat($(this).text());
-                }
-            });
-            $('#error').text(error);
-
-            var mape = 0;
-            $('.mape').each(function() {
-                if ($(this).text() != '') {
-                    mape += parseFloat($(this).text());
-                }
-            });
-            $('#mape').text(mape + ' %');
-
-            var mad = 0;
-            $('.mad').each(function() {
-                if ($(this).text() != '') {
-                    mad += parseFloat($(this).text());
-                }
-            });
-            $('#mad').text(mad);
-
-            var mse = 0;
-            $('.mse').each(function() {
-                if ($(this).text() != '') {
-                    mse += parseFloat($(this).text());
-                }
-            });
-            $('#mse').text(mse);
-
-            var total = $('.permintaan').length;
-
-            var jum_mov = 0;
-            for (var i = 1; i <= kosong; i++) {
-                jum_mov += parseFloat($('.permintaan')[total - i].innerText);
-            }
-
-            $('#ave_error').text(parseInt(error / (total - kosong)));
-            $('#ave_mape').text(parseInt(mape / (total - kosong)) + ' %');
-            $('#ave_mad').text(parseInt(mad / (total - kosong)));
-            $('#ave_mse').text(parseInt(mse / (total - kosong)));
-
-            var standar_error = parseInt(mse / (total - kosong));
-            standar_error = parseInt(Math.sqrt(standar_error));
-
-            $('#standar_error').text(standar_error);
-
-            // $('#bulan_depan').text(numberWithCommas(Math.ceil(jum_mov / kosong)));
-            var label = @json($label);
-            var aktual = @json($aktual);
-            var hasil = @json($hasil);
-
-            const ctx = document.getElementById('myChart').getContext('2d');
-            const myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: label,
-                    datasets: [{
-                            label: 'Data Aktual',
-                            data: aktual,
-                            fill: true,
-                            borderColor: 'rgb(75, 192, 192)',
-                            tension: 0.1
-                        },
-                        {
-                            label: 'Data Peramalan',
-                            data: hasil,
-                            fill: true,
-                            borderColor: 'rgb(255, 99, 132)',
-                            tension: 0.1
-                        }
-                    ]
-                }
-            });
-        </script>
-    @endif
+    
 @endsection
