@@ -13,9 +13,9 @@ class LaporanController extends Controller
     public function index()
     {
         $permintaan = Permintaan::all();
-        $laporanUht = Laporan::where('category', 'UHT')->get();
-        $laporanFm = Laporan::where('category', 'Fresh Milk')->get();
-        $laporanBeans = Laporan::where('category', 'Beans')->get();
+        $laporanUht = Laporan::where('category', 'UHT')->orderBy('date')->get();
+        $laporanFm = Laporan::where('category', 'Fresh Milk')->orderBy('date')->get();
+        $laporanBeans = Laporan::where('category', 'Beans')->orderBy('date')->get();
         return view('laporan', compact('permintaan','laporanUht','laporanFm','laporanBeans'));
     }
 
@@ -52,6 +52,16 @@ class LaporanController extends Controller
         $laporan->save();
 
         Alert::success('Berhasil', 'Laporan berhasil ditambahkan');
+        return back();
+    }
+
+    public function destroy($id)
+    {
+        Laporan::find($id)->delete();
+		
+	// alihkan halaman ke halaman pegawai
+
+        Alert::success('Berhasil', 'Data berhasil dihapus');
         return back();
     }
 }

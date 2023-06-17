@@ -62,8 +62,8 @@
                                         <tr>
                                             <th>Sales</th>
                                             <th>Tanggal</th>
-                                            {{-- <th>Permintaan</th>
-                                            <th>Sisa</th> --}}
+                                            <th>Aksi</th>
+                                            {{-- <th>Sisa</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -71,6 +71,8 @@
                                             <tr>
                                                 <td>{{ $item->sales }}</td>
                                                 <td>{{ tgl_indo($item->date) }}</td>
+                                                <td><a href="laporan/delete/{{ $item->id }}" class="btn btn-warning">Hapus</a></td>
+
                                                 {{-- <td>{{ $item->jumlah_impor }}</td>
                                                 <td>{{ $item->jumlah_permintaan }}</td> --}}
                                             </tr>
@@ -88,8 +90,8 @@
                                         <tr>
                                             <th>Sales</th>
                                             <th>Tanggal</th>
-                                            {{-- <th>Permintaan</th>
-                                            <th>Sisa</th> --}}
+                                            <th>Aksi</th>
+                                            {{-- <th>Sisa</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -97,8 +99,8 @@
                                             <tr>
                                                 <td>{{ $item->sales }}</td>
                                                 <td>{{ tgl_indo($item->date) }}</td>
-                                                {{-- <td>{{ $item->jumlah_impor }}</td>
-                                                <td>{{ $item->jumlah_permintaan }}</td> --}}
+                                                <td><a href="laporan/delete/{{ $item->id }}" class="btn btn-warning">Hapus</a></td>
+                                                {{-- <td>{{ $item->jumlah_permintaan }}</td> --}}
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -114,6 +116,8 @@
                                         <tr>
                                             <th>Sales</th>
                                             <th>Tanggal</th>
+                                            <th>Aksi</th>
+
                                             {{-- <th>Permintaan</th>
                                             <th>Sisa</th> --}}
                                         </tr>
@@ -123,6 +127,8 @@
                                             <tr>
                                                 <td>{{ $item->sales }}</td>
                                                 <td>{{ tgl_indo($item->date) }}</td>
+                                                <td><a href="laporan/delete/{{ $item->id }}" class="btn btn-warning">Hapus</a></td>
+
                                                 {{-- <td>{{ $item->jumlah_impor }}</td>
                                                 <td>{{ $item->jumlah_permintaan }}</td> --}}
                                             </tr>
@@ -153,7 +159,8 @@
 
                         <div class="form-group">
                             <label>Sales</label>
-                            <input type="number" class="form-control" name="sales">
+                            <input type="number" class="form-control" min="0" oninput="this.value = 
+                            !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null" name="sales">
                         </div>
                         <div class="form-group">
                             <label>Tanggal</label>

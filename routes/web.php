@@ -44,6 +44,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('logout', [UserController::class, 'logout'])->name('logout');
     Route::get('hapus-peramalan', [PeramalanController::class, 'hapusPeramalan']);
     Route::get('status_user/{id}', [UserController::class, 'status']);
+    Route::get('laporan/delete/{id}', [LaporanController::class, 'destroy']);
     Route::post('/laporan/create', [LaporanController::class, 'create'])->name('laporan.create');
 });
 
