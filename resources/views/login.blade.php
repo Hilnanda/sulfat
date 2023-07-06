@@ -16,7 +16,7 @@
 
     <style>
         .bg-gradient-success {
-            background-color: #FAC900;
+            background-color: black;
         }
 
         input {
