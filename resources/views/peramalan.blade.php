@@ -46,37 +46,6 @@
         </div>
     </div>
 
-    {{-- @if (count($avgs) > 0)
-        <div class="row mb-3">
-            <div class="col mb-3">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <h6 class="card-title">Prediksi Permintaan Bulan Depan</h6>
-                    </div>
-                    <div class="card-body text-center">
-                        <span class="font-weight-bold">
-                            {{ number_format($peramalan[count($peramalan) - 1]->bulan_depan, 0, ',', '.') }}
-                        </span>
-                    </div>
-                    <div class="card-footer text-center"> --}}
-                        {{-- text miring --}}
-                        {{-- <span class="text-muted">
-                            <i>Hasil peramalan diatas, adalah hasil peramalan permintaan untuk bulan depan yang bisa
-                                dijadikan
-                                acuan dalam pengambilan keputusan dalam menentukan jumlah produksi.</i>
-                        </span>
-                    </div>
-                </div>
-            </div> --}}
-            {{-- <div class="col mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <canvas id="myChart" width="auto" height="150%"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif --}}
 
     <div class="row">
         <div class="col">
